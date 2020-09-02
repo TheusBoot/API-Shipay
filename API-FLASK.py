@@ -16,13 +16,13 @@ database_ = {
 
 
 
-def validate_cpf(cpf: str) -> bool:
+def _cpf(cpf: str) -> bool:
 
     if cpf is confirme_condition and cpf is not None:
         return True
     else: return False
 
-def validate_cnpj(cnpj: str) -> bool:
+def _cnpj(cnpj: str) -> bool:
 
     if cnpj is confirme_condition and cnpj is not None:
         return True
@@ -38,12 +38,12 @@ def validate_cnpj(cnpj: str) -> bool:
 app = Flask(__name__)
 
 @app.route("/api/v1/transacao", methods=['POST'])
-def post_transacao():
+def payment_transacao():
 
     argumentos_ = request.json()
-    cliente_cpf = argumentos_.get("cliente")
     cliente_cnpj = argumentos_.get("estabelecimento")
-    if validate_cpf(cliente_cpf) and validate_cnpj(cliente_cnpj):
+    cliente_cpf = argumentos_.get("cliente")
+    if _cpf(cliente_cpf) and _cnpj(cliente_cnpj):
         del argumentos_["estabelecimento"]
         database_["recebimentos"].append(argumentos_)
         database_["total_recebido"] += argumentos_["valor"]
@@ -55,7 +55,7 @@ def post_transacao():
 
 
 @app.route("/api/v1/transacoes/estabelecimento?cnpj=<cnpj>", methods=['GET'])
-def get_all_transactions(cnpj: str):
+def todastransacoes(cnpj: str):
 
     todos_cnpj = database_
     return todos_cnpj
